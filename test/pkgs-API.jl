@@ -33,5 +33,8 @@ using Main.JuliaPkgsList: getName, getRepo, getStarCount
     @test isa(jlInd, Int) && jlInd > 0
     @test getName(pkgs[jlInd]) == JULIA_NAME
 
+    # All packages have necessary information
+    @test getSortedPkgs(pkgs)[1] == JULIA_REPO
+    
     rm(PKGS_INFO_FILE)
 end

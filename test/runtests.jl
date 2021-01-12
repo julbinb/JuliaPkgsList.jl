@@ -26,7 +26,6 @@ const JULIA_NAME = "julia"
 #--------------------------------------------------
 
 include("utils.jl")
-include("pkgs-API.jl")
 
 @testset "JuliaPkgsList.jl :: main processing function" begin
     pkgs = loadPkgsData(SAMPLE_FILE)
@@ -40,3 +39,5 @@ include("pkgs-API.jl")
     @test getSortedPkgs(pkgs)[3] == "https://github.com/FluxML/Zygote.jl.git"
     @test getSortedPkgs(pkgs, true; excludedRepos=[JULIA_REPO])[2] == "Zygote"
 end
+
+include("pkgs-API.jl")

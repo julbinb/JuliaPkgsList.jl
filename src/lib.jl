@@ -3,6 +3,20 @@
 # and sorting them by the number of stars
 #######################################################################
 
+#--------------------------------------------------
+# Data
+#--------------------------------------------------
+
+# Expected format of JSON data: `{packages: [...]}`
+const PKGS_KEY = "packages"
+
+# Expected format of a single package:
+# `{name: ..., metadata: {repo:..., starcount: ...}}`
+const NAME_KEY          = "name"
+const METADATA_KEY      = "metadata"
+const REPO_KEY          = "repo"
+const STARTCOUNT_KEY    = "starcount"
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Extracting list of packages
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
