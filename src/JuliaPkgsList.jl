@@ -125,7 +125,7 @@ downloadPkgsInfo(pkgsInfoFile :: String) = begin
 end
 
 loadExcludedRepos(excludedReposFile :: String) :: Vector{String} = begin
-    @info("Loading the list of excluded repositories from $(excludedReposFile)...")
+    @status("Loading the list of excluded repositories from $(excludedReposFile)...")
     text = 
         try
             read(excludedReposFile, String)
@@ -134,6 +134,7 @@ loadExcludedRepos(excludedReposFile :: String) :: Vector{String} = begin
                 "Unable to load the list of excluded repositories",
                 err)
         end
+    @status("EXCLUDED $(text)")
     repos = filter(!isempty, split(text, '\n'))
     Vector{String}(repos)
 end
