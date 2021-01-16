@@ -2,9 +2,7 @@
 # 
 #######################################################################
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 #--------------------------------------------------
 # 
@@ -17,6 +15,7 @@ module JuliaPkgsList
 #--------------------------------------------------
 
 export genTopPkgsList, getSortedPkgsInfo, getSortedPkgs
+export PKGS_INFO_URL, loadPkgsData
 
 #--------------------------------------------------
 # Imports
@@ -50,12 +49,20 @@ const EXCLUDED_REPOS_FILE = mkDataPath("excluded.txt")
 # If `true`, functions print some status information
 VERBOSE = true
 
-#--------------------------------------------------
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Code
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#--------------------------------------------------
+# Library
 #--------------------------------------------------
 
 include("utils.jl")
 include("lib.jl")
+
+#--------------------------------------------------
+# Main entry function
+#--------------------------------------------------
 
 """
     genTopPkgsList(...)
@@ -102,6 +109,10 @@ genTopPkgsList(
     @status("Packages list generation COMPLETED")
 end
 
+#--------------------------------------------------
+# Aux functions
+#--------------------------------------------------
+
 downloadPkgsInfo(pkgsInfoFile :: String) = begin
     @status("Downloading packages info into $(pkgsInfoFile)...")
     try
@@ -114,7 +125,7 @@ downloadPkgsInfo(pkgsInfoFile :: String) = begin
 end
 
 loadExcludedRepos(excludedReposFile :: String) :: Vector{String} = begin
-    @info("Loading the list of excluded repositories...")
+    @info("Loading the list of excluded repositories from $(excludedReposFile)...")
     text = 
         try
             read(excludedReposFile, String)
@@ -128,7 +139,7 @@ loadExcludedRepos(excludedReposFile :: String) :: Vector{String} = begin
 end
 
 loadPkgsInfo(pkgsInfoFile :: String) :: Vector = begin
-    @status("Loading packages data...")
+    @status("Loading packages data from $(pkgsInfoFile)...")
     try
         loadPkgsData(pkgsInfoFile)
     catch err
@@ -156,9 +167,15 @@ outputPkgsInfo(
             (dirPath, fileName) = splitdir(pkgsListOutputFile)
             pkgsListOutputFile = joinpath(dirPath, "$(topPkgsNum)-$(fileName)")
         end
-        @status("Writing output file...")
-        open(pkgsListOutputFile, "w") do io
-            write(io, output)
+        @status("Writing output to $(pkgsListOutputFile)...")
+        try
+            open(pkgsListOutputFile, "w") do io
+                write(io, output)
+            end
+        catch err
+            exitErrWithMsg(
+                "Unable to write to the output file (possibly, the folder doesn't exist)",
+                err)
         end
     end
 end

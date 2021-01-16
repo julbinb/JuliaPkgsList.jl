@@ -6,8 +6,84 @@
 Generates the list of the N most starred Julia packages
 using the data from [JuliaHub](https://juliahub.com/).
 
-Namely, downloads [this JSON file](https://juliahub.com/app/packages/info),
-and sorts packages from the most to least starred.
+## Usage
+
+### Script
+
+For detailed help, run
+
+    $ [julia] ./gen-pkgs-list.jl -h
+
+#### Most common usages
+
+```
+$ [julia] ./gen-pkgs-list.jl 10 -o mydata/pkgs-list.txt -n --includeversion
+```
+
+outputs the list of names and latest versions of the 10 most starred packages
+to the file `mydata/10-pkgs-list.txt` (folder `mydata` needs to exist),
+excluding packages with repositories listed in
+[`data/excluded.txt`](data/excluded.txt).
+
+```
+$ [julia] ./gen-pkgs-list.jl 0 -r -o julia-pkgs.txt --nopkgnum --noexclude
+```
+
+redownloads packages data JSON and
+outputs the list of repositories of all packages (0 means all packages,
+`--noexclude` means nothing is excluded)
+to the file `julia-pkgs.txt` (`--nopkgnum` means that the number of packages
+is not prepended to the output file name).
+
+### Module
+
+To obtain arbitrary information for the list of sorted packages,
+for example, tuples of (package name, description, star count),
+you can do the following:
+
+```julia
+include("src/JuliaPkgsList.jl")
+# introduces PKGS_INFO_URL, loadPkgsData, getSortedPkgsInfo
+using Main.JuliaPkgsList
+
+getDescription(pkgInfo :: Dict) :: String =
+    JuliaPkgsList.getMetaDataValue(pkgInfo, "description", "<no description>")
+
+getMyInfo(pkgInfo :: Dict) = (
+    JuliaPkgsList.getName(pkgInfo),
+    getDescription(pkgInfo),
+    JuliaPkgsList.getStarCount(pkgInfo))
+
+const PKGS_JSON = "julia-pkgs-info.json"
+
+download(PKGS_INFO_URL, PKGS_JSON)
+pkgs = loadPkgsData(PKGS_JSON)
+
+sortedPkgsInfo = getSortedPkgsInfo(pkgs, getMyInfo)
+#=
+4882-element Array{Tuple{String,String,Int64},1}:
+ ("julia", "The Julia Programming Language", 31228)
+ ("Flux", "Relax! Flux is the ML library that doesn't make you tensor", 2720)
+ ("Pluto", "🎈 Simple reactive notebooks for Julia", 2237)
+ ("IJulia", "Julia kernel for Jupyter", 2149)
+ ("Gadfly", "Crafty statistical graphics for Julia.", 1598)
+ ...
+ ("Secp256k1", "", -1)
+ ("SimpleCache", "", -1)
+ ("SquashFS", "", -1)
+ ("StanMCMCChain", "", -1)
+ ("Unicode2LaTeX", "", -1)
+ ("YahooFinance", "", -1)
+=#
+```
+
+## Details
+
+Downloads [this JSON file](https://juliahub.com/app/packages/info),
+sorts packages from the most to least starred,
+and outputs some information about the packages
+(names or repos, optionally with latest versions).
+
 The JSON file is expected to have the following structure:
 
 ```
@@ -36,7 +112,7 @@ The JSON file is expected to have the following structure:
 
 - [`README.md`](README.md) this file
 
-- [`Project.toml`](Project.toml) dependencies
+- [`gen-pkgs-list.jl`](gen-pkgs-list.jl) script for an easy use of the module
 
 - [`src`](src) source code
 
@@ -48,7 +124,9 @@ The JSON file is expected to have the following structure:
 
 - [`test`](test) tests
 
-    - [`runtests.jl`](test/runtests.jl) main test file
+    - [`runtests.jl`](test/runtests.jl) main test file that inlcudes
+      other tests as well as tests for entry functions
+
     - [`utils.jl`](test/utils.jl) tests for aux function dealing with
       info extraction from package data
     - [`pkgs-API.jl`](test/pkgs-API.jl) tests for the format of the current
@@ -58,6 +136,8 @@ The JSON file is expected to have the following structure:
 
 - [`run-tests.jl`](run-tests.jl) script for easy running of
   [`test/runtests.jl`](test/runtests.jl)
+
+- [`Project.toml`](Project.toml) dependencies
 
 ## Dependencies
 
