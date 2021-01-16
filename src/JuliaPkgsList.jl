@@ -95,6 +95,7 @@ genTopPkgsList(
     end
     # load excluded packages
     excluded = useExcluded ? loadExcludedRepos(excludedReposFile) : String[]
+    @warn("EXCLUDED FINAL $(excluded)")
     # get pkgs data
     pkgs = loadPkgsInfo(pkgsInfoFile)
     sortedPkgs = 
@@ -134,8 +135,9 @@ loadExcludedRepos(excludedReposFile :: String) :: Vector{String} = begin
                 "Unable to load the list of excluded repositories",
                 err)
         end
-    @status("EXCLUDED $(text)")
+    @warn("EXCLUDED $(text)")
     repos = filter(!isempty, split(text, '\n'))
+    @warn("EXCLUDED $(repos)")
     Vector{String}(repos)
 end
 
