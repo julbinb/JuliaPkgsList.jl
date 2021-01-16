@@ -88,6 +88,7 @@ genTopPkgsList(
     useStdOut           :: Bool     = false,
     useExcluded         :: Bool     = true
 ) = begin
+    topPkgsNum >= 0 || exitErrWithMsg("The number of packages cannot be negative")
     @status("Packages list generation STARTED")
     # obtain package info
     if reloadPkgsInfo || !isfile(pkgsInfoFile)
@@ -95,7 +96,6 @@ genTopPkgsList(
     end
     # load excluded packages
     excluded = useExcluded ? loadExcludedRepos(excludedReposFile) : String[]
-    @warn("EXCLUDED FINAL $(excluded)")
     # get pkgs data
     pkgs = loadPkgsInfo(pkgsInfoFile)
     sortedPkgs = 
@@ -106,6 +106,10 @@ genTopPkgsList(
             exitErrWithMsg("Unable to process packages data", err)
         end
     # outputting information
+    if topPkgsNum > length(sortedPkgs)
+        topPkgsNum = length(sortedPkgs)
+        @status("The number of packages is too big -- set to the max $(topPkgsNum)")
+    end
     outputPkgsInfo(sortedPkgs, topPkgsNum, useStdOut, pkgsListOutputFile, addPkgNum)
     @status("Packages list generation COMPLETED")
 end
@@ -135,9 +139,7 @@ loadExcludedRepos(excludedReposFile :: String) :: Vector{String} = begin
                 "Unable to load the list of excluded repositories",
                 err)
         end
-    @warn("EXCLUDED $(text)")
-    repos = filter(!isempty, split(text, '\n'))
-    @warn("EXCLUDED $(repos)")
+    repos = filter(!isempty, splitlines(text))
     Vector{String}(repos)
 end
 
@@ -156,11 +158,6 @@ outputPkgsInfo(
     sortedPkgs :: Vector, topPkgsNum :: Int,
     useStdOut :: Bool, pkgsListOutputFile :: String, addPkgNum :: Bool
 ) = begin
-    topPkgsNum >= 0 || exitErrWithMsg("The number of packages cannot be negative")
-    if topPkgsNum > length(sortedPkgs)
-        topPkgsNum = length(sortedPkgs)
-        @status("The number of packages is too big -- set to the max $(topPkgsNum)")
-    end
     resultPkgs = topPkgsNum == 0 ? sortedPkgs : sortedPkgs[1:topPkgsNum]
     output = join(map(string, resultPkgs), '\n')
     if useStdOut

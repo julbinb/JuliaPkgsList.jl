@@ -49,11 +49,9 @@ getSortedPkgsInfo(
     pkgs :: Vector, getInfo :: Function;
     excludedRepos :: Vector{String} = String[]
 ) :: Vector = begin
-    @warn("excludedRepos $(excludedRepos)")
     if !isempty(excludedRepos)
         @status "Cleaning packages..."
         pkgs = filter(pkg -> !in(getRepo(pkg), excludedRepos), pkgs)
-        @warn("$(pkgs[105])")
     end
     @status "Sorting packages..."
     sorted = sortStarred(pkgs)

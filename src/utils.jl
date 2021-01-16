@@ -20,3 +20,5 @@ end
 macro status(info)
     :(if VERBOSE ; @info($(esc(info))) end)
 end
+
+splitlines(str) = split(str, r"\n|\r\n")
