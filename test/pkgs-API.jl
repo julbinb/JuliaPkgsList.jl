@@ -27,6 +27,8 @@ using Main.JuliaPkgsList: getName, getRepo, getStarCount
     @test isa(md1, Dict)
     @test haskey(md1, JuliaPkgsList.REPO_KEY)
     @test isa(md1[JuliaPkgsList.REPO_KEY], String)
+    @test haskey(md1, JuliaPkgsList.VERSIONS_KEY)
+    @test isa(md1[JuliaPkgsList.VERSIONS_KEY], Vector)
 
     # Julia package itself is in the list
     jlInd = findfirst(pkg -> getRepo(pkg) == JULIA_REPO, pkgs)
@@ -36,5 +38,6 @@ using Main.JuliaPkgsList: getName, getRepo, getStarCount
     # All packages have necessary information
     @test getSortedPkgs(pkgs)[1] == JULIA_REPO
     
-    rm(PKGS_INFO_FILE)
+    # `rm` was failing on Windows x64 (Jan 2020, Julia 1.5.3)
+    tryrm(PKGS_INFO_FILE)
 end

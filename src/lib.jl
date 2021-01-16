@@ -16,6 +16,12 @@ const NAME_KEY          = "name"
 const METADATA_KEY      = "metadata"
 const REPO_KEY          = "repo"
 const STARTCOUNT_KEY    = "starcount"
+const VERSIONS_KEY      = "versions"
+
+# Placeholders if data is not available
+const NAME_NA           = "<NA-name>"
+const REPO_NA           = "<NA-repo>"
+const VERSION_NA        = "<NA-version>"
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Extracting list of packages
@@ -27,9 +33,11 @@ const STARTCOUNT_KEY    = "starcount"
 # excluding packages with repos listed in `excludedRepos`
 getSortedPkgs(
     pkgs :: Vector, showName :: Bool = false;
-    excludedRepos :: Vector{String} = String[]
+    excludedRepos :: Vector{String} = String[], includeVersion :: Bool = false
 ) :: Vector{String} = getSortedPkgsInfo(
-    pkgs, showName ? getName : getRepo;
+    pkgs, showName ? 
+        (includeVersion ? getNameAndVersion : getName) : 
+        (includeVersion ? getRepoAndVersion : getRepo);
     excludedRepos=excludedRepos
 )
 
@@ -78,12 +86,27 @@ getMetaDataValue(pkgInfo :: Dict, key :: String, default :: Any) :: Any = begin
 end
 
 # (PackageInfo, String) → String
-getName(pkgInfo :: Dict) :: String = get(pkgInfo, NAME_KEY, "<NA-name>")
+getName(pkgInfo :: Dict) :: String = get(pkgInfo, NAME_KEY, NAME_NA)
 
 # (PackageInfo, String) → String
 getRepo(pkgInfo :: Dict) :: String =
-    getMetaDataValue(pkgInfo, REPO_KEY, "<NA-repo>")
+    getMetaDataValue(pkgInfo, REPO_KEY, REPO_NA)
 
 # (PackageInfo, String) → Int
 getStarCount(pkgInfo :: Dict) :: Int =
     getMetaDataValue(pkgInfo, STARTCOUNT_KEY, 0)
+
+# (PackageInfo, String) → String
+# List of versions is sorted from the latest version
+getLatestVersion(pkgInfo :: Dict) :: String = begin
+    versions = getMetaDataValue(pkgInfo, VERSIONS_KEY, [])
+    isempty(versions) ? VERSION_NA : versions[1]
+end
+
+# (PackageInfo, String) → String
+getNameAndVersion(pkgInfo :: Dict) :: String =
+    "$(getName(pkgInfo)), $(getLatestVersion(pkgInfo))"
+
+# (PackageInfo, String) → String
+getRepoAndVersion(pkgInfo :: Dict) :: String =
+    "$(getRepo(pkgInfo)), $(getLatestVersion(pkgInfo))"
