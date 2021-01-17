@@ -145,4 +145,52 @@ The JSON file is expected to have the following structure:
   - `JSON` for processing JSON file with the packages data
   - `ArgParse` for the aux script generating the list of packages
 
+## Excluded packages
 
+Some packages are no longer available publicly,
+some are copies of other packages (have been renamed).
+
+Packages excluded by default are listed in
+[`data/excluded.txt`](data/excluded.txt).
+Those include the following, as well as all packages from the next section
+(not available):
+
+- Julia language repo itself (`https://github.com/JuliaLang/julia.git`)
+- Packages that don't appear to be Julia packages:
+  - `https://github.com/Lonero-Team/Decentralized-Internet.git`
+  - `https://github.com/plotly/dash-html-components.git`
+- Empty package, which was merged somewhere
+  (`https://github.com/dmlc/MXNet.jl.git`)
+- Duplicate packages
+  - Renamed to `Franklin.jl` (`https://github.com/tlienart/JuDoc.jl.git`)
+  - Deprecated, became `ValueShapes.jl`
+    (`https://github.com/oschulz/ShapesOfVariables.jl.git`)
+
+#### Not available
+
+```
+https://github.com/Moelf/BigG.jl.git
+https://github.com/bcbi/CountdownLetters.jl.git
+https://github.com/bcbi/CountdownNumbers.jl.git
+https://github.com/mipals/SymSemiseparableMatrices.jl.git
+https://github.com/aramirezreyes/AvailablePotentialEnergyFramework.jl.git
+https://github.com/MUsmanZahid/DTALib.jl.git
+https://github.com/lucianolorenti/Estapir.jl.git
+https://github.com/GuilhermeHaetinger/KelvinletsImage.jl.git
+https://github.com/PetrKryslUCSD/MeshFinder.jl.git
+https://github.com/PetrKryslUCSD/MeshMaker.jl.git
+https://github.com/PetrKryslUCSD/MeshPorter.jl.git
+https://github.com/PetrKryslUCSD/MeshKeeper.jl.git
+https://github.com/tlienart/MLJScikitLearn.jl.git
+https://github.com/THM-MoTE/ModelicaScriptingTools.jl.git
+https://github.com/louiscmm/Sinaica.jl.git
+https://github.com/MUsmanZahid/TeXTable.jl.git
+https://github.com/rjdverbeek-tud/Atmosphere.jl.git
+https://github.com/mrtkp9993/Bioinformatics.jl.git
+https://github.com/anders-dc/Granular.jl.git
+https://github.com/oscar-system/GAPTypes.jl.git
+https://github.com/rbalexan/InfrastructureSensing.jl.git
+https://github.com/slmcbane/MirroredArrayViews.jl.git
+https://github.com/markushhh/YahooFinance.jl.git
+https://github.com/StanJulia/StanMCMCChain.jl.git
+```
