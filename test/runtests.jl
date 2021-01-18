@@ -53,7 +53,7 @@ end
     )
     @test isfile(fname1)
     @test read(fname1, String) ==
-        "JuMP, 0.21.5\nZygote, 0.6.0\nJuliaDB, 0.13.1\nJuliaZH, 1.5.4\nJuDoc, 0.4.3"
+        "JuMP, 0.21.5\nZygote, 0.6.0\nJuliaDB, 0.13.1\nJuliaZH, 1.5.4\nJavis, 0.4.0"
     tryrm(fname1)
     # repos, empty list of excluded packages
     fname2 = testFilePath("pkgs-list.txt")
