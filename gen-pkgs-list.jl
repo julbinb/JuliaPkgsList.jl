@@ -8,6 +8,9 @@
 # Imports
 #--------------------------------------------------
 
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
 include("src/JuliaPkgsList.jl")
 using Main.JuliaPkgsList
 
