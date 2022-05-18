@@ -22,6 +22,7 @@ export PKGS_INFO_URL, loadPkgsData
 #--------------------------------------------------
 
 using JSON
+using Downloads
 
 #--------------------------------------------------
 # Data and parameters
@@ -121,7 +122,7 @@ end
 downloadPkgsInfo(pkgsInfoFile :: String) = begin
     @status("Downloading packages info into $(pkgsInfoFile)...")
     try
-        download(PKGS_INFO_URL, pkgsInfoFile)
+        Downloads.download(PKGS_INFO_URL, pkgsInfoFile)
     catch err
         exitErrWithMsg(
             "Unable to download Julia packages information from Julia Hub",

@@ -22,8 +22,8 @@ end
     @test getRepo(juliaPkg) == JULIA_REPO
     @test getStarCount(juliaPkg) == 31228
     @test getLatestVersion(juliaPkg) == "1.5.3"
-    @test JuliaPkgsList.getNameAndVersion(juliaPkg) == "julia, 1.5.3"
-    @test JuliaPkgsList.getRepoAndVersion(juliaPkg) == "$(JULIA_REPO), 1.5.3"
+    @test JuliaPkgsList.getNameAndVersion(juliaPkg) == "julia,1.5.3"
+    @test JuliaPkgsList.getRepoAndVersion(juliaPkg) == "$(JULIA_REPO),1.5.3"
     yieldMacrosPkg = pkgs[20]
     @test getName(yieldMacrosPkg) == "AbstractYieldMacros"
     @test getStarCount(yieldMacrosPkg) == 0

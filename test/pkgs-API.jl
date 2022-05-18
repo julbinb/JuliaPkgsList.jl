@@ -3,7 +3,7 @@ using Main.JuliaPkgsList: getName, getRepo, getStarCount
 @testset "JuliaPkgsList.jl :: pkgs API" begin
     @info "Downloading packages info..."
     # URL is still valid and produces a JSON file
-    download(JuliaPkgsList.PKGS_INFO_URL, PKGS_INFO_FILE)
+    Downloads.download(JuliaPkgsList.PKGS_INFO_URL, PKGS_INFO_FILE)
     @test isfile(PKGS_INFO_FILE)
 
     @info "Checking the format..."

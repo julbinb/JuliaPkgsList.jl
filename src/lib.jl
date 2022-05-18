@@ -105,8 +105,8 @@ end
 
 # (PackageInfo, String) → String
 getNameAndVersion(pkgInfo :: Dict) :: String =
-    "$(getName(pkgInfo)), $(getLatestVersion(pkgInfo))"
+    "$(getName(pkgInfo)),$(getLatestVersion(pkgInfo))"
 
 # (PackageInfo, String) → String
 getRepoAndVersion(pkgInfo :: Dict) :: String =
-    "$(getRepo(pkgInfo)), $(getLatestVersion(pkgInfo))"
+    "$(getRepo(pkgInfo)),$(getLatestVersion(pkgInfo))"

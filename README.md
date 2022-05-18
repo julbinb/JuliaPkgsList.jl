@@ -14,6 +14,9 @@ For detailed help, run
 
     $ [julia] ./gen-pkgs-list.jl -h
 
+**Note.** All specified dependencies need to be installed in the default
+environment for the above to work.
+
 #### Most common usages
 
 ```
@@ -143,6 +146,7 @@ The JSON file is expected to have the following structure:
 
 * [Julia](https://julialang.org/) with the following packages:
   - `JSON` for processing JSON file with the packages data
+  - `Downloads` for downloading JSON with packages info
   - `ArgParse` for the aux script generating the list of packages
 
 ## Excluded packages
