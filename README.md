@@ -176,8 +176,6 @@ Those include the following, as well as all packages from the next section
 https://github.com/Moelf/BigG.jl.git
 https://github.com/bcbi/CountdownLetters.jl.git
 https://github.com/bcbi/CountdownNumbers.jl.git
-https://github.com/mipals/SymSemiseparableMatrices.jl.git
-https://github.com/aramirezreyes/AvailablePotentialEnergyFramework.jl.git
 https://github.com/MUsmanZahid/DTALib.jl.git
 https://github.com/lucianolorenti/Estapir.jl.git
 https://github.com/GuilhermeHaetinger/KelvinletsImage.jl.git
