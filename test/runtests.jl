@@ -6,7 +6,6 @@ using JuliaPkgsList
 
 using Test
 using JSON
-using Downloads
 
 #--------------------------------------------------
 # Aux values and functions

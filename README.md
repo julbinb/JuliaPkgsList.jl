@@ -6,6 +6,10 @@
 Generates the list of the N most starred Julia packages
 using the data from [JuliaHub](https://juliahub.com/).
 
+**Note.** Works from Julia 1.3. To run on Julia 1.0 up to 1.3,
+use [`Project-1.0-1.2.toml`](Project-1.0-1.2.toml) as the project file
+(i.e., rename it to `Project.toml`).
+
 ## Usage
 
 ### Script
@@ -146,7 +150,8 @@ The JSON file is expected to have the following structure:
 
 * [Julia](https://julialang.org/) with the following packages:
   - `JSON` for processing JSON file with the packages data
-  - `Downloads` for downloading JSON with packages info
+  - `Downloads` for downloading JSON with packages info (exists starting with
+    Julia 1.3)
   - `ArgParse` for the aux script generating the list of packages
 
 ## Excluded packages

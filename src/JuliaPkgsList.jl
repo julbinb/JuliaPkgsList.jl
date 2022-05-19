@@ -1,12 +1,7 @@
 #######################################################################
-# 
+# Package for generating the list of the N most starred Julia packages
+# using the data from [JuliaHub](https://juliahub.com/)
 #######################################################################
-
-
-
-#--------------------------------------------------
-# 
-#--------------------------------------------------
 
 module JuliaPkgsList
 
@@ -22,7 +17,15 @@ export PKGS_INFO_URL, loadPkgsData
 #--------------------------------------------------
 
 using JSON
-using Downloads
+
+# Starting with Julia 1.6, `Base.download` is deprecated
+# Package `Downloads` is available starting with Julia 1.3
+@static if VERSION >= v"1.3"
+    using Downloads
+    downloadCompat = Downloads.download
+else
+    downloadCompat = download
+end
 
 #--------------------------------------------------
 # Data and parameters
@@ -122,7 +125,7 @@ end
 downloadPkgsInfo(pkgsInfoFile :: String) = begin
     @status("Downloading packages info into $(pkgsInfoFile)...")
     try
-        Downloads.download(PKGS_INFO_URL, pkgsInfoFile)
+        downloadCompat(PKGS_INFO_URL, pkgsInfoFile)
     catch err
         exitErrWithMsg(
             "Unable to download Julia packages information from Julia Hub",
