@@ -45,6 +45,9 @@ function parse_command_line_args()
         "--includeversion"
             help = "flag specifying if the output should include the latest version of packages"
             action = :store_true
+        "--includeuuid"
+            help = "flag specifying if the output should include the UUID of packages"
+            action = :store_true
 
         "--excluded", "-e"
             help = "file with a list of repositories to exclude"
@@ -83,6 +86,7 @@ genTopPkgsList(
     addPkgNum = !PARAMS["nopkgnum"],
     showName = PARAMS["name"],
     includeVersion = PARAMS["includeversion"],
+    includeUUID = PARAMS["includeuuid"],
     pkgsInfoFile = PARAMS["pkginfo"],
     excludedReposFile = PARAMS["excluded"],
     useStdOut = PARAMS["show"],

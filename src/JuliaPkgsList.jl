@@ -87,6 +87,7 @@ genTopPkgsList(
     addPkgNum           :: Bool     = true,
     showName            :: Bool     = false,
     includeVersion      :: Bool     = false,
+    includeUUID         :: Bool     = false,
     pkgsInfoFile        :: String   = PKGS_INFO_FILE,
     excludedReposFile   :: String   = EXCLUDED_REPOS_FILE,
     useStdOut           :: Bool     = false,
@@ -105,7 +106,8 @@ genTopPkgsList(
     sortedPkgs = 
         try
             getSortedPkgs(pkgs, showName;
-                excludedRepos=excluded, includeVersion=includeVersion)
+                excludedRepos=excluded,
+                includeVersion=includeVersion, includeUUID=includeUUID)
         catch err
             exitErrWithMsg("Unable to process packages data", err)
         end

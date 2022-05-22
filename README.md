@@ -24,10 +24,11 @@ environment for the above to work.
 #### Most common usages
 
 ```
-$ [julia] ./gen-pkgs-list.jl 10 -o mydata/pkgs-list.txt -n --includeversion
+$ [julia] ./gen-pkgs-list.jl 10 -o mydata/pkgs-list.txt -n --includeuuid --includeversion
 ```
 
-outputs the list of names and latest versions of the 10 most starred packages
+outputs the list of names, uuids, and latest versions
+of the 10 most starred packages
 to the file `mydata/10-pkgs-list.txt` (folder `mydata` needs to exist),
 excluding packages with repositories listed in
 [`data/excluded.txt`](data/excluded.txt).

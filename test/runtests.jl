@@ -61,13 +61,24 @@ end
         pkgsListOutputFile=fname2, pkgsInfoFile=SAMPLE_FILE,
         excludedReposFile=testFilePath("noexcluded.txt")
     )
-    fname2 = testFilePath("4-pkgs-list.txt")
+    fname2 = testFilePath("4-pkgs-list.txt") # `4-` is added to the file name
     @test isfile(fname2)
     @test read(fname2, String) == join([
         "https://github.com/JuliaLang/julia.git", "https://github.com/jump-dev/JuMP.jl.git",
         "https://github.com/FluxML/Zygote.jl.git", "https://github.com/JuliaData/JuliaDB.jl.git"
     ], "\n")
     tryrm(fname2)
+    # names with versions and UUIDs, excluded packages
+    fname3 = testFilePath("top-2-pkgs-list-uuid.txt")
+    genTopPkgsList(2;
+        pkgsListOutputFile=fname3, addPkgNum=false,
+        showName=true, includeVersion=true, includeUUID=true,
+        pkgsInfoFile=SAMPLE_FILE
+    )
+    @test isfile(fname3)
+    @test read(fname3, String) ==
+        "JuMP,4076af6c-e467-56ae-b986-b466b2749572,0.21.5\nZygote,e88e6eb3-aa80-5325-afca-941959d7151f,0.6.0"
+    tryrm(fname3)
 end
 
 include("pkgs-API.jl")

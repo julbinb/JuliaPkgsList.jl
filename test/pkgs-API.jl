@@ -23,6 +23,8 @@ using Main.JuliaPkgsList: downloadCompat
     pkg1 = pkgs[1]
     @test haskey(pkg1, JuliaPkgsList.NAME_KEY)
     @test isa(pkg1[JuliaPkgsList.NAME_KEY], String)
+    @test haskey(pkg1, JuliaPkgsList.UUID_KEY)
+    @test isa(pkg1[JuliaPkgsList.UUID_KEY], String)
     @test haskey(pkg1, JuliaPkgsList.METADATA_KEY)
     md1 = pkg1[JuliaPkgsList.METADATA_KEY]
     @test isa(md1, Dict)

@@ -13,6 +13,7 @@ const PKGS_KEY = "packages"
 # Expected format of a single package:
 # `{name: ..., metadata: {repo:..., starcount: ...}}`
 const NAME_KEY          = "name"
+const UUID_KEY          = "uuid"
 const METADATA_KEY      = "metadata"
 const REPO_KEY          = "repo"
 const STARTCOUNT_KEY    = "starcount"
@@ -20,6 +21,7 @@ const VERSIONS_KEY      = "versions"
 
 # Placeholders if data is not available
 const NAME_NA           = "<NA-name>"
+const UUID_NA           = "<NA-uuid>"
 const REPO_NA           = "<NA-repo>"
 const VERSION_NA        = "<NA-version>"
 
@@ -27,17 +29,22 @@ const VERSION_NA        = "<NA-version>"
 # Extracting list of packages
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-# (Vector{PackageInfo}, Bool, Vector{String}) → Vector{String}
+# (Vector{PackageInfo}, Bool, Vector{String}; [Bool, Bool]) → Vector{String}
 # Returns the list of package repos or package names depending on `showName`,
 # sorted from the most to least starred packages,
-# excluding packages with repos listed in `excludedRepos`
+# excluding packages with repos listed in `excludedRepos`.
 getSortedPkgs(
     pkgs :: Vector, showName :: Bool = false;
-    excludedRepos :: Vector{String} = String[], includeVersion :: Bool = false
+    excludedRepos :: Vector{String} = String[],
+    includeVersion :: Bool = false, includeUUID :: Bool = false
 ) :: Vector{String} = getSortedPkgsInfo(
     pkgs, showName ? 
-        (includeVersion ? getNameAndVersion : getName) : 
-        (includeVersion ? getRepoAndVersion : getRepo);
+        (includeVersion ? 
+            (includeUUID ? getNameUUIDVersion : getNameAndVersion) : 
+            (includeUUID ? getNameAndUUID : getName)) : 
+        (includeVersion ? 
+            (includeUUID ? getRepoUUIDVersion : getRepoAndVersion) : 
+            (includeUUID ? getRepoAndUUID : getRepo));
     excludedRepos=excludedRepos
 )
 
@@ -89,6 +96,9 @@ end
 getName(pkgInfo :: Dict) :: String = get(pkgInfo, NAME_KEY, NAME_NA)
 
 # (PackageInfo, String) → String
+getUUID(pkgInfo :: Dict) :: String = get(pkgInfo, UUID_KEY, UUID_NA)
+
+# (PackageInfo, String) → String
 getRepo(pkgInfo :: Dict) :: String =
     getMetaDataValue(pkgInfo, REPO_KEY, REPO_NA)
 
@@ -103,10 +113,26 @@ getLatestVersion(pkgInfo :: Dict) :: String = begin
     isempty(versions) ? VERSION_NA : versions[1]
 end
 
-# (PackageInfo, String) → String
+# PackageInfo → String
 getNameAndVersion(pkgInfo :: Dict) :: String =
     "$(getName(pkgInfo)),$(getLatestVersion(pkgInfo))"
 
-# (PackageInfo, String) → String
+# PackageInfo → String
 getRepoAndVersion(pkgInfo :: Dict) :: String =
     "$(getRepo(pkgInfo)),$(getLatestVersion(pkgInfo))"
+
+# PackageInfo → String
+getNameAndUUID(pkgInfo :: Dict) :: String =
+    "$(getName(pkgInfo)),$(getUUID(pkgInfo))"
+
+# PackageInfo → String
+getRepoAndUUID(pkgInfo :: Dict) :: String =
+    "$(getRepo(pkgInfo)),$(getUUID(pkgInfo))"
+
+# PackageInfo → String
+getNameUUIDVersion(pkgInfo :: Dict) :: String =
+    "$(getName(pkgInfo)),$(getUUID(pkgInfo)),$(getLatestVersion(pkgInfo))"
+
+# PackageInfo → String
+getRepoUUIDVersion(pkgInfo :: Dict) :: String =
+    "$(getRepo(pkgInfo)),$(getUUID(pkgInfo)),$(getLatestVersion(pkgInfo))"
