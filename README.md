@@ -120,7 +120,10 @@ The JSON file is expected to have the following structure:
 
 - [`README.md`](README.md) this file
 
+- [`init-script.jl`](init-script.jl) installs the package into
+  the current environment (needed to run `gen-pkgs-list.jl`)
 - [`gen-pkgs-list.jl`](gen-pkgs-list.jl) script for an easy use of the module
+  (requires `init-script.jl` to be run first)
 
 - [`src`](src) source code
 
